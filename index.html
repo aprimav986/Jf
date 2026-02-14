@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Josh’s Fans</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --blue:#00aff0;
+  --bg:#f1f3f5;
+  --card:#fff;
+  --text:#222;
+}
+body.dark{
+  --bg:#0f1115;
+  --card:#1b1e24;
+  --text:#eee;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif;}
+body{background:var(--bg);color:var(--text);overflow-x:hidden;}
+
+/* ===== NAV ===== */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:var(--blue);
+  padding:14px 20px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.logo{
+  display:flex;align-items:center;gap:10px;
+  animation:pop .8s ease;
+}
+@keyframes pop{
+  0%{transform:scale(.7)}
+  60%{transform:scale(1.1)}
+  100%{transform:scale(1)}
+}
+.logo-text{
+  font-size:2.8rem;
+  font-weight:700;
+  color:#fff;
+}
+.logo-text span{font-weight:600}
+.lock{width:30px;height:30px}
+
+.right-icons{
+  position:absolute;right:20px;
+  display:flex;gap:14px;align-items:center;
+}
+.bell{cursor:pointer;position:relative}
+.badge{
+  position:absolute;top:-6px;right:-8px;
+  background:red;color:#fff;
+  font-size:.7rem;padding:2px 6px;border-radius:50%;
+}
+.toggle{cursor:pointer;font-size:1.2rem}
+
+/* ===== BANNER ===== */
+.banner{
+  height:160px;
+  background:linear-gradient(135deg,#00aff0,#007bbf);
+  display:flex;justify-content:flex-end;align-items:flex-end;
+  padding:10px;color:white;font-size:.8rem;opacity:.8;
+}
+
+/* ===== LAYOUT ===== */
+.main{
+  max-width:1100px;
+  margin:-60px auto 40px;
+  padding:0 20px;
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:30px;
+}
+
+/* ===== PROFILE ===== */
+.profile{
+  background:var(--card);
+  border-radius:16px;
+  padding:20px;
+  text-align:center;
+  box-shadow:0 8px 25px rgba(0,0,0,.15);
+}
+.avatar{width:110px;margin:-70px auto 10px}
+.verified{color:var(--blue)}
+.subs{font-size:.9rem;opacity:.8;margin-top:6px}
+.subscribe{
+  margin-top:14px;
+  background:var(--blue);
+  color:#fff;border:none;
+  padding:12px;width:100%;
+  border-radius:30px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* ===== TABS ===== */
+.tabs{display:flex;gap:10px;margin-bottom:15px}
+.tab{
+  padding:8px 14px;border-radius:20px;
+  background:#ddd;cursor:pointer;font-weight:600;
+}
+.tab.active{background:var(--blue);color:#fff}
+
+/* ===== FEED ===== */
+.feed{display:none;flex-direction:column;gap:25px}
+.feed.active{display:flex}
+
+.post{
+  background:var(--card);
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 8px 25px rgba(0,0,0,.15);
+  position:relative;
+}
+.post-header{font-weight:700;margin-bottom:10px}
+.actions{display:flex;gap:20px;font-size:.9rem;opacity:.8}
+.action{cursor:pointer}
+
+/* ===== SVG "PHOTOS" ===== */
+.photo{
+  width:100%;height:160px;margin:10px 0;
+  background:repeating-linear-gradient(
+    45deg,
+    #00aff0,
+    #00aff0 10px,
+    #fff 10px,
+    #fff 20px
+  );
+  border-radius:10px;
+}
+
+/* ===== LOCKED ===== */
+.locked{filter:blur(6px)}
+.lock-overlay{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.55);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:16px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* ===== POPUPS ===== */
+.overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;align-items:center;justify-content:center;
+  z-index:100;
+}
+.box{
+  background:var(--card);
+  padding:30px;border-radius:16px;
+  text-align:center;
+  max-width:300px;
+}
+
+/* ===== CONFETTI ===== */
+.confetti{
+  position:fixed;width:8px;height:8px;
+  background:var(--blue);
+  animation:fall 2s linear forwards;
+}
+@keyframes fall{
+  to{transform:translateY(100vh) rotate(360deg);opacity:0}
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:900px){
+  .main{grid-template-columns:1fr}
+  .logo-text{font-size:2.2rem}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="logo">
+    <div class="logo-text">Josh’s<span>fans</span></div>
+    <svg class="lock" viewBox="0 0 24 24">
+      <path fill="#fff" d="M12 2a5 5 0 00-5 5v3H6a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2v-8a2 2 0 00-2-2h-1V7a5 5 0 00-5-5z"/>
+    </svg>
+  </div>
+
+  <div class="right-icons">
+    <div class="bell" onclick="alert('🔔 Josh posted new enamel content')">
+      🔔<div class="badge">3</div>
+    </div>
+    <div class="toggle" onclick="toggleDark()">🌙</div>
+  </div>
+</div>
+
+<div class="banner">✏️ Edit cover photo</div>
+
+<div class="main">
+
+<!-- PROFILE -->
+<div class="profile">
+  <svg class="avatar" viewBox="0 0 64 64">
+    <path fill="#fff" stroke="#00aff0" stroke-width="3"
+      d="M32 4c-14 0-20 6-20 16 0 12 4 32 8 36 3 3 8-8 12-8s9 11 12 8c4-4 8-24 8-36 0-10-6-16-20-16z"/>
+  </svg>
+  <h2>Josh <span class="verified">✔️</span></h2>
+  <p>Teeth enjoyer. Plaque destroyer.</p>
+  <div class="subs"><strong id="subs">12,438</strong> subscribers</div>
+  <button class="subscribe" onclick="tip()">Tip $5</button>
+</div>
+
+<!-- CONTENT -->
+<div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab(0)">Posts</div>
+    <div class="tab" onclick="showTab(1)">Media</div>
+    <div class="tab" onclick="showTab(2)">About</div>
+  </div>
+
+  <!-- POSTS -->
+  <div class="feed active">
+    <div class="post">
+      <div class="post-header">Josh · 1h ago</div>
+      <p>Brushed twice. Thought about a third.</p>
+      <div class="photo"></div>
+      <div class="actions">
+        <div class="action" onclick="like(this)">❤️ <span>214</span></div>
+        <div class="action" onclick="comments()">💬 32</div>
+      </div>
+    </div>
+
+    <div class="post">
+      <div class="post-header">Josh · Premium</div>
+      <div class="locked">
+        <p>Extreme braces content.</p>
+        <div class="photo"></div>
+      </div>
+      <div class="lock-overlay" onclick="unlock()">🔒 Unlock</div>
+    </div>
+  </div>
+
+  <!-- MEDIA -->
+  <div class="feed">
+    <div class="post">
+      <p>📸 128 high-resolution tooth photos.<br>No gums were harmed.</p>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="feed">
+    <div class="post">
+      <p>Josh has loved teeth since childhood.<br>
+      Dentists fear him. Plaque respects him.</p>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- POPUPS -->
+<div class="overlay" id="popup">
+  <div class="box">
+    <h3>Premium unlocked 🦷</h3>
+    <p>Josh trusts you now.</p>
+    <button onclick="closePopup()">Close</button>
+  </div>
+</div>
+
+<div class="overlay" id="comments">
+  <div class="box">
+    <h3>Top comment</h3>
+    <p>“These teeth changed my life.”</p>
+    <button onclick="closeComments()">Close</button>
+  </div>
+</div>
+
+<script>
+/* tabs */
+function showTab(i){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.feed').forEach(f=>f.classList.remove('active'));
+  document.querySelectorAll('.tab')[i].classList.add('active');
+  document.querySelectorAll('.feed')[i].classList.add('active');
+}
+
+/* dark mode */
+function toggleDark(){document.body.classList.toggle('dark')}
+
+/* likes */
+function like(el){
+  let span = el.querySelector('span');
+  span.textContent = +span.textContent + 1;
+}
+
+/* comments */
+function comments(){document.getElementById('comments').style.display='flex'}
+function closeComments(){document.getElementById('comments').style.display='none'}
+
+/* premium */
+function unlock(){document.getElementById('popup').style.display='flex'}
+function closePopup(){
+  document.getElementById('popup').style.display='none';
+  document.querySelectorAll('.locked').forEach(e=>e.style.filter='none');
+  document.querySelectorAll('.lock-overlay').forEach(e=>e.remove());
+}
+
+/* subs counter */
+let c=12438;
+setInterval(()=>{
+  c++;
+  document.getElementById('subs').textContent=c.toLocaleString();
+},4000);
+
+/* tips + confetti */
+function tip(){
+  for(let i=0;i<30;i++){
+    let d=document.createElement('div');
+    d.className='confetti';
+    d.style.left=Math.random()*100+'vw';
+    d.style.background=`hsl(${Math.random()*360},80%,60%)`;
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),2000);
+  }
+}
+</script>
+
+</body>
+</html>
